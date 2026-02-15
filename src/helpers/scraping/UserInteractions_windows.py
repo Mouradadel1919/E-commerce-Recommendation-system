@@ -1,7 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from datetime import datetime
@@ -35,7 +34,6 @@ def save_event(action, file_path):
 
     return data
 
-
 def log_event(session, event_type, link, duration=None):
     event = {
         "event_type": event_type,
@@ -46,9 +44,7 @@ def log_event(session, event_type, link, duration=None):
         event["duration"] = duration
 
     session["events"].append(event)
-
     return session
-
 
 
 # -------------------------
@@ -84,62 +80,47 @@ def inject_cart_tracker(driver):
         obs.observe(document.body, { childList: true, subtree: true });
     """)
 
+
 # -------------------------
 # Main function
 # -------------------------
-def user_interactions(user_id: str = "user_2", duration_sec: int = 300):
-    final_interactions = []
-    file_path = "user_events.json"
+def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
+    final_interaction = []
 
+    file_path = "user_events.json"
     session = define_session(user_id=user_id)
 
-    # --------------------------
-    # Enable GUI on WSL
-    # --------------------------
-    os.environ["DISPLAY"] = ":0"   # For WSL1
-    # For WSL2 you may need:
-    # os.environ["DISPLAY"] = os.popen("grep nameserver /etc/resolv.conf | awk '{print $2}'").read().strip() + ":0"
-
+    # ✅ Windows Chrome config
     options = Options()
-
-    # ❌ DO NOT use headless for GUI
-    # options.add_argument("--headless=new")
-
-    # Stability flags for WSL
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--window-size=1920,1080")
     options.add_argument("--start-maximized")
-
-    # Hide automation banner
+    options.add_argument("--disable-infobars")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-notifications")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option("useAutomationExtension", False)
 
-    # Let webdriver-manager handle driver ↔ chrome version
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
     wait = WebDriverWait(driver, 15)
 
-    # Open main products page
+    # Open site
     driver.get("https://afaq-stores.com/products")
 
     on_product_page = False
     start_time = None
     current_product = None
-
-    # Stop after `duration_sec` seconds
     end_time = time.time() + duration_sec
 
     try:
         while time.time() < end_time:
+
             current_url = driver.current_url
             is_product = is_product_page(current_url)
 
-            # ENTER product page
+            # ENTER product
             if is_product and not on_product_page:
                 action = log_event(session, "product_open", current_url)
-                data= save_event(action=action, file_path=file_path)
+                data = save_event(action, file_path)
 
                 start_time = time.time()
                 current_product = current_url
@@ -148,45 +129,46 @@ def user_interactions(user_id: str = "user_2", duration_sec: int = 300):
                 inject_buy_tracker(driver)
                 inject_cart_tracker(driver)
 
-            # EXIT product page
+            # EXIT product
             elif not is_product and on_product_page:
                 duration = round(time.time() - start_time, 2)
                 action = log_event(session, "product_exit", current_product, duration)
-                data= save_event(action=action, file_path=file_path)
+                data = save_event(action, file_path)
 
                 on_product_page = False
                 current_product = None
 
-            # Check buttons inside product page
+            # Button tracking
             if on_product_page:
                 buy_clicked = driver.execute_script("return window.buyClicked;")
                 cart_clicked = driver.execute_script("return window.cartClicked;")
 
                 if buy_clicked:
                     action = log_event(session, "buy_click", current_product)
+                    data = save_event(action, file_path)
                     driver.execute_script("window.buyClicked = false;")
-                    data= save_event(action=action, file_path=file_path)
 
                 if cart_clicked:
                     action = log_event(session, "add_to_cart", current_product)
+                    data = save_event(action, file_path)
                     driver.execute_script("window.cartClicked = false;")
-                    data= save_event(action=action, file_path=file_path)
 
             time.sleep(0.1)
 
     except Exception as e:
         print("Error:", e)
 
-        final_interactions.append(data[-1])
-        final_path = "final_interactions.json"
-        _ = save_event(final_interactions, final_path)
+        final_interaction.append(data[-1])
+        final_path = "final_interaction.json"
+        _ = save_event(final_interaction, final_path)
 
-        driver.quit()
-
+    print("Tracking finished. Press Enter to close browser...")
+    input()
+    driver.quit()
 
 
 # -------------------------
-# Run Example
+# Run
 # -------------------------
 if __name__ == "__main__":
-    user_interactions(user_id="user_2", duration_sec=300)  # 5 min tracking
+    user_interactions(user_id="user_2", duration_sec=300)
