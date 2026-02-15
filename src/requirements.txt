@@ -5,3 +5,8 @@ uvicorn[standard]==0.40.0
 python-multipart==0.0.22
 pydantic-settings==2.12.0
 motor==3.7.1
+pandas==2.2.3
+selenium==4.40.0
+numpy==2.2.6
+webdriver-manager==4.0.2
+bs4==0.0.2

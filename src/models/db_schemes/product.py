@@ -10,14 +10,3 @@ class Product(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
-
-
-    '''
-    id_: Optional[ObjectId]= Field(None)
-    name: str= Field(...)
-    product_id: str= Field(...)
-    category: str= Field(...)
-    stock: str= Field()
-    price: float= Field(...)
-    product_link: str= Field(...)
-    '''
