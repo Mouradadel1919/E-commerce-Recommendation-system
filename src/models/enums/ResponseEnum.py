@@ -2,8 +2,11 @@ from enum import Enum
 
 class ResponseSignal(Enum):
     
-    PRODUCT_FOUND_SUCCESS = "file_founded_successfully"
-    PRODUCT_FOUND_FAIL = "file_founded_fail"
-    PRODUCT_UPLOAD_SUCCESS = "products_uploaded_successfully"
+    PRODUCT_FOUND_SUCCESS = "files founded successfully"
+    PRODUCT_FOUND_FAIL = "files not founded"
+    PRODUCT_UPLOAD_SUCCESS = "products uploaded successfully"
+
+    EVENT_FOUND_FAIL = "events not founded"
+    EVENT_FOUND_SUCCESS =  "events founded successfully"
 
  

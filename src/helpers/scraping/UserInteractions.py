@@ -87,9 +87,11 @@ def inject_cart_tracker(driver):
 # -------------------------
 # Main function
 # -------------------------
-def user_interactions(user_id: str = "user_2", duration_sec: int = 300):
-    final_interactions = []
-    file_path = "user_events.json"
+def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
+    #file_path = "user_events.json"
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))  # helpers/scraping
+    file_path = os.path.join(base_dir, "user_events.json")
 
     session = define_session(user_id=user_id)
 
@@ -176,17 +178,19 @@ def user_interactions(user_id: str = "user_2", duration_sec: int = 300):
 
     except Exception as e:
         print("Error:", e)
+        final_event = []
 
-        final_interactions.append(data[-1])
-        final_path = "final_interactions.json"
-        _ = save_event(final_interactions, final_path)
+        #final_path = os.path.join(base_dir, "final_interactions.json")
+        final_event.append(data[-1])
 
         driver.quit()
+    return final_event
 
 
-
+'''
 # -------------------------
 # Run Example
 # -------------------------
 if __name__ == "__main__":
     user_interactions(user_id="user_2", duration_sec=300)  # 5 min tracking
+'''
