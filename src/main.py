@@ -23,20 +23,6 @@ async def startup_db_client():
         port = settings.VECTOR_DB_PORT
     )
 
-    # Create collection if not exists
-    embedding_dim = 768  # mpnet model dimension
-
-    collections = app.qdrant_client.get_collections().collections
-    collection_names = [c.name for c in collections]
-
-    if "products" not in collection_names:
-        app.qdrant_client.create_collection(
-            collection_name="products",
-            vectors_config=VectorParams(
-                size=embedding_dim,
-                distance=Distance.COSINE
-            )
-        )
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

@@ -30,7 +30,7 @@ async def upload_products(request: Request):
             "inserted": inserted
             }
         )
-
+'''
 events = get_events(path=EventsEnums.EVENTS_FILE_PATH.value)
 
 @app_router_data.post("/events")
@@ -49,7 +49,7 @@ async def upload_events(request: Request):
             "inserted": inserted
             }
         )
-
+'''
 @app_router_data.get("/interactions/{user_id}")
 async def user_tracking(user_id: str, request: Request):
     user_event = user_interactions(user_id=user_id, duration_sec=300)  # 5 min tracking

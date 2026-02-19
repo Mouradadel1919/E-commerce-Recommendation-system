@@ -25,6 +25,7 @@ app_router_sys = APIRouter()
 
 embedding_dim = 768
 BATCH_SIZE = 200
+
 @app_router_sys.get("/init_vectordb")
 async def upload_products(request: Request):
 
@@ -38,6 +39,18 @@ async def upload_products(request: Request):
         batch_size=64,  # smaller batches fit in RAM
         show_progress_bar=True
     )
+
+    collections = request.app.qdrant_client.get_collections().collections
+    collection_names = [c.name for c in collections]
+
+    if "products" not in collection_names:
+        request.app.qdrant_client.create_collection(
+            collection_name="products",
+            vectors_config=VectorParams(
+                size=embedding_dim,
+                distance=Distance.COSINE
+            )
+       )
 
 
     points = [

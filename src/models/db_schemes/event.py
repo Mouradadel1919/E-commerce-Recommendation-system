@@ -5,7 +5,6 @@ from bson.objectid import ObjectId
 class Event(BaseModel):
     mongo_id: Optional[ObjectId] = Field(None, alias="_id")
     session_id: Optional[str]= Field(None)
-    user_id: str = Field(...)
     event: Dict[str, Any] = Field(...)
 
     class Config:

@@ -16,12 +16,10 @@ class EventModel(BaseDataModel):
         docs = []
 
         for p in events:
-            user_id = p["user_id"]
             session_id = str(uuid4())
             for e in p["events"]:
                 validated = Event(
                     session_id=session_id,
-                    user_id=user_id,
                     event=e  # e is already a dict
                 )
                 docs.append(validated.dict(by_alias=True, exclude_unset=True))
@@ -29,6 +27,7 @@ class EventModel(BaseDataModel):
         result = await self.collection.insert_many(docs)
         return len(result.inserted_ids)
     
+'''    
     async def get_event(self, user_id: str):
         record = await self.collection.find({
             "user_id": user_id
@@ -37,6 +36,8 @@ class EventModel(BaseDataModel):
         if record is None:
             return ResponseSignal.EVENT_FOUND_FAIL.value
         return ResponseSignal.EVENT_FOUND_SUCCESS.value
+
+'''
 '''
     async def insert_event(self, event: list[dict]):
         event_validated = Event(**event)

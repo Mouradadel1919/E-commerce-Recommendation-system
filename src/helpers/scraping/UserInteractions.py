@@ -8,12 +8,13 @@ from datetime import datetime
 import json
 import time
 import os
+import uuid
 
 # -------------------------
 # Helpers
 # -------------------------
-def define_session(user_id: str = "user_1"):
-    return {"user_id": user_id, "events": []}
+def define_session():
+    return {"events": []}
 
 def is_product_page(url):
     return "product-details" in url
@@ -36,8 +37,9 @@ def save_event(action, file_path):
     return data
 
 
-def log_event(session, event_type, link, duration=None):
+def log_event(session, event_type, link, user_id, duration=None):
     event = {
+        "user_id": user_id,
         "event_type": event_type,
         "timestamp": datetime.utcnow().isoformat(),
         "product_link": link
@@ -89,11 +91,12 @@ def inject_cart_tracker(driver):
 # -------------------------
 def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
     #file_path = "user_events.json"
+    #session_id = str(uuid.uuid4())
 
     base_dir = os.path.dirname(os.path.abspath(__file__))  # helpers/scraping
     file_path = os.path.join(base_dir, "user_events.json")
 
-    session = define_session(user_id=user_id)
+    session = define_session()
 
     # --------------------------
     # Enable GUI on WSL
@@ -140,7 +143,7 @@ def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
 
             # ENTER product page
             if is_product and not on_product_page:
-                action = log_event(session, "product_open", current_url)
+                action = log_event(session, "product_open", current_url, user_id=user_id)
                 data= save_event(action=action, file_path=file_path)
 
                 start_time = time.time()
@@ -153,7 +156,7 @@ def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
             # EXIT product page
             elif not is_product and on_product_page:
                 duration = round(time.time() - start_time, 2)
-                action = log_event(session, "product_exit", current_product, duration)
+                action = log_event(session, "product_exit", current_product, user_id=user_id, duration=duration)
                 data= save_event(action=action, file_path=file_path)
 
                 on_product_page = False
@@ -165,12 +168,12 @@ def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
                 cart_clicked = driver.execute_script("return window.cartClicked;")
 
                 if buy_clicked:
-                    action = log_event(session, "buy_click", current_product)
+                    action = log_event(session, "buy_click", current_product, user_id=user_id)
                     driver.execute_script("window.buyClicked = false;")
                     data= save_event(action=action, file_path=file_path)
 
                 if cart_clicked:
-                    action = log_event(session, "add_to_cart", current_product)
+                    action = log_event(session, "add_to_cart", current_product, user_id=user_id)
                     driver.execute_script("window.cartClicked = false;")
                     data= save_event(action=action, file_path=file_path)
 
@@ -180,8 +183,11 @@ def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
         print("Error:", e)
         final_event = []
 
-        #final_path = os.path.join(base_dir, "final_interactions.json")
+        final_path = os.path.join(base_dir, "final_interactions.json")
         final_event.append(data[-1])
+
+        with open(final_path, "w") as f:
+            json.dump(final_event, f, indent=2)
 
         driver.quit()
     return final_event
