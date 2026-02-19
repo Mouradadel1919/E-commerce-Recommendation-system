@@ -31,7 +31,7 @@ async def upload_products(request: Request):
             }
         )
 
-events = get_products(path=EventsEnums.EVENTS_FILE_PATH.value)
+events = get_events(path=EventsEnums.EVENTS_FILE_PATH.value)
 
 @app_router_data.post("/events")
 async def upload_events(request: Request):

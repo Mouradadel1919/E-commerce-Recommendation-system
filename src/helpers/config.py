@@ -8,6 +8,10 @@ class Settings(BaseSettings):
     MONGODB_URL: str
     MONGODB_DATABASE: str
 
+    HF_TOKE: str
+
+    VECTOR_DB_PORT: int
+
     class Config:
         env_file= ".env"
 

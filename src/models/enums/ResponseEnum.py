@@ -9,4 +9,6 @@ class ResponseSignal(Enum):
     EVENT_FOUND_FAIL = "events not founded"
     EVENT_FOUND_SUCCESS =  "events founded successfully"
 
+    EMBEDDING_UPLOADED_SUCCESS= "Embeddings updated successfully"
+
  
