@@ -11,6 +11,7 @@ from fastapi import FastAPI, APIRouter, Request, status
 logger = logging.getLogger("uvicorn.error")
 app_router_data = APIRouter()
 
+
 products = get_products(path=ProductEnums.PRODUCTS_FILE_PATH.value)
 
 
@@ -30,6 +31,23 @@ async def upload_products(request: Request):
             "inserted": inserted
             }
         )
+
+@app_router_data.get("/interactions/{user_id}")
+async def user_tracking(user_id: str, request: Request):
+    user_event = user_interactions(user_id=user_id, duration_sec=300)  # 5 min tracking
+    
+    event_model = EventModel(request.app.db_client)
+    inserted = await event_model.insert_many_events(user_event)
+
+    return JSONResponse(
+            
+            content={
+            "status": ResponseSignal.EVENT_FOUND_SUCCESS.value,
+            "inserted": inserted
+            }
+        )
+
+
 '''
 events = get_events(path=EventsEnums.EVENTS_FILE_PATH.value)
 
@@ -50,17 +68,3 @@ async def upload_events(request: Request):
             }
         )
 '''
-@app_router_data.get("/interactions/{user_id}")
-async def user_tracking(user_id: str, request: Request):
-    user_event = user_interactions(user_id=user_id, duration_sec=300)  # 5 min tracking
-    
-    event_model = EventModel(request.app.db_client)
-    inserted = await event_model.insert_many_events(user_event)
-
-    return JSONResponse(
-            
-            content={
-            "status": ResponseSignal.EVENT_FOUND_SUCCESS.value,
-            "inserted": inserted
-            }
-        )

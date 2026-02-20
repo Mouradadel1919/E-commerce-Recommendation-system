@@ -183,11 +183,11 @@ def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
         print("Error:", e)
         final_event = []
 
-        final_path = os.path.join(base_dir, "final_interactions.json")
+        #final_path = os.path.join(base_dir, "final_interactions.json")
         final_event.append(data[-1])
 
-        with open(final_path, "w") as f:
-            json.dump(final_event, f, indent=2)
+        #with open(final_path, "w") as f:
+        #    json.dump(final_event, f, indent=2)
 
         driver.quit()
     return final_event
