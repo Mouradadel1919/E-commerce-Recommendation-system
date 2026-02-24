@@ -1,16 +1,14 @@
-from models import ProductModel, EventModel
-from models import Product, ProductEnums, ResponseSignal, EventsEnums
-from helpers import get_products, get_events, user_interactions, get_setting
+from models import ProductModel, ALSModel
+from models import ResponseSignal
+from helpers import get_setting
 import logging
 import os
 from models import ResponseSignal
 
 
-from bson import ObjectId
 from fastapi.responses import JSONResponse
-from fastapi import FastAPI, APIRouter, Request, status
+from fastapi import APIRouter, Request
 from sentence_transformers import SentenceTransformer
-from pymongo import UpdateOne
 from qdrant_client.models import Distance, VectorParams
 from qdrant_client.models import PointStruct
 
@@ -18,12 +16,12 @@ settings = get_setting()
 
 os.environ["HF_TOKEN"] = settings.HF_TOKE
 
-model = SentenceTransformer("paraphrase-multilingual-mpnet-base-v2")
+model = SentenceTransformer("intfloat/multilingual-e5-large")
 logger = logging.getLogger("uvicorn.error")
 app_router_sys = APIRouter()
 
 
-embedding_dim = 768
+embedding_dim = 1024
 BATCH_SIZE = 200
 
 @app_router_sys.get("/init_vectordb")
@@ -31,13 +29,14 @@ async def upload_products(request: Request):
 
     product_model = ProductModel(request.app.db_client)
     records = await product_model.get_all_products()
-    contents = [p["content"] for p in records]  # extract content
+    contents = ["passage: " + p["content"] for p in records]  # extract content
 
 
     product_embeddings = model.encode(
         contents,  # use list comprehension
-        batch_size=64,  # smaller batches fit in RAM
-        show_progress_bar=True
+        batch_size=32,  # smaller batches fit in RAM
+        show_progress_bar=True,
+        normalize_embeddings=True 
     )
 
     collections = request.app.qdrant_client.get_collections().collections
@@ -87,13 +86,16 @@ async def test_retrieval(request: Request, vecdb_id: str):
     content = product["content"]
 
     # 2️⃣ Encode query
-    query_embedding = model.encode(content)
+    query_embedding = model.encode(
+        "query: " + content,
+        normalize_embeddings=True,
+    )
 
     # 3️⃣ Search in Qdrant
     search_result = request.app.qdrant_client.query_points(  # ✅ was search_points
         collection_name="products",
         query=query_embedding.tolist(),
-        limit=5
+        limit=6
     )
 
     # 4️⃣ Format results
@@ -107,10 +109,43 @@ async def test_retrieval(request: Request, vecdb_id: str):
 
     return {
         "query_product": content,
-        "results": results
+        "results": results[1:]
     }
 
-    '''
+
+@app_router_sys.get("/collaborative/{user_id}")
+async def collaborative(request: Request, user_id: str, n: int = 10):
+    als_model = ALSModel(request.app.db_client)
+    records = await als_model.get_user_item_score_matrix()
+
+    sparse_matrix = als_model.build_sparse_matrix(records)
+    als_model.train(sparse_matrix)
+    recommendations = als_model.recommend(user_id, sparse_matrix, n)
+
+    return JSONResponse(content={
+        "status": ResponseSignal.EVENT_FOUND_SUCCESS.value,
+        "user_id": user_id,
+        "recommendations": recommendations
+    })
+
+
+
+'''
+@app_router_sys.get("/collaborative")
+async def collaborative(request: Request):
+    als_model = ALSModel(request.app.db_client)
+    records = await als_model.get_user_item_score_matrix()
+
+    return JSONResponse(
+            
+            content={
+            "status": ResponseSignal.EVENT_FOUND_SUCCESS.value,
+            "records": records
+            }
+        )
+'''
+
+'''
     query_embedding = model.encode(user_clicked_product_content)
 
 search_result = request.app.qdrant_client.search(
@@ -123,7 +158,7 @@ recommended_products = [
     hit.payload for hit in search_result
 ]
 
-    '''
+'''
     
 
 

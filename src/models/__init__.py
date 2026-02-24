@@ -7,3 +7,4 @@ from .ProductModel import ProductModel
 from .enums.ProductsEnums import ProductEnums
 from .EventModel import EventModel
 from .enums.EventsEnums import EventsEnums
+from .ALSModel import ALSModel

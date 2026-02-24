@@ -37,12 +37,13 @@ def save_event(action, file_path):
     return data
 
 
-def log_event(session, event_type, link, user_id, duration=None):
+def log_event(session, event_type, link, user_id, duration=None, score=0):
     event = {
         "user_id": user_id,
         "event_type": event_type,
         "timestamp": datetime.utcnow().isoformat(),
-        "product_link": link
+        "product_link": link,
+        "score": score
     }
     if duration is not None:
         event["duration"] = duration
@@ -143,7 +144,7 @@ def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
 
             # ENTER product page
             if is_product and not on_product_page:
-                action = log_event(session, "product_open", current_url, user_id=user_id)
+                action = log_event(session, "product_open", current_url, user_id=user_id, score=1)
                 data= save_event(action=action, file_path=file_path)
 
                 start_time = time.time()
@@ -156,7 +157,7 @@ def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
             # EXIT product page
             elif not is_product and on_product_page:
                 duration = round(time.time() - start_time, 2)
-                action = log_event(session, "product_exit", current_product, user_id=user_id, duration=duration)
+                action = log_event(session, "product_exit", current_product, user_id=user_id, duration=duration, score=0)
                 data= save_event(action=action, file_path=file_path)
 
                 on_product_page = False
@@ -168,12 +169,12 @@ def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
                 cart_clicked = driver.execute_script("return window.cartClicked;")
 
                 if buy_clicked:
-                    action = log_event(session, "buy_click", current_product, user_id=user_id)
+                    action = log_event(session, "buy_click", current_product, user_id=user_id, score=5)
                     driver.execute_script("window.buyClicked = false;")
                     data= save_event(action=action, file_path=file_path)
 
                 if cart_clicked:
-                    action = log_event(session, "add_to_cart", current_product, user_id=user_id)
+                    action = log_event(session, "add_to_cart", current_product, user_id=user_id, score=3)
                     driver.execute_script("window.cartClicked = false;")
                     data= save_event(action=action, file_path=file_path)
 

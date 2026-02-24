@@ -12,3 +12,4 @@ webdriver-manager==4.0.2
 bs4==0.0.2
 sentence-transformers==5.2.3
 qdrant-client==1.16.2
+implicit==0.7.2

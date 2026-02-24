@@ -3,9 +3,7 @@ from routers import base_router, app_router_data, app_router_sys
 from helpers import get_setting
 from motor.motor_asyncio import AsyncIOMotorClient
 from qdrant_client import QdrantClient
-from models import ProductModel
-from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams
+
 
 app = FastAPI()
 
