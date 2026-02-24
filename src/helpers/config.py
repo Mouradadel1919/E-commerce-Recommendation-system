@@ -12,6 +12,8 @@ class Settings(BaseSettings):
 
     VECTOR_DB_PORT: int
 
+    SENTENCE_TRANSFORMER: str
+
     class Config:
         env_file= ".env"
 

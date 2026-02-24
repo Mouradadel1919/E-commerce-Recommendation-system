@@ -47,24 +47,3 @@ async def user_tracking(user_id: str, request: Request):
             }
         )
 
-
-'''
-events = get_events(path=EventsEnums.EVENTS_FILE_PATH.value)
-
-@app_router_data.post("/events")
-async def upload_events(request: Request):
-
-    if not events:
-        return {"inserted": 0, "message": ResponseSignal.EVENT_FOUND_FAIL.value}
-
-    event_model = EventModel(request.app.db_client)
-    inserted = await event_model.insert_many_events(events)
-
-    return JSONResponse(
-            
-            content={
-            "status": ResponseSignal.EVENT_FOUND_SUCCESS.value,
-            "inserted": inserted
-            }
-        )
-'''
