@@ -23,6 +23,16 @@ A full-stack intelligent recommendation engine that combines **Selenium web scra
 This project is an end-to-end recommendation system built for e-commerce platforms. It ingests real product data through Selenium-based web scraping, tracks rich user interaction signals, stores dense vector embeddings in Qdrant, and serves personalized recommendations through a **FastAPI** backend using a hybrid approach combining **Content-Based Filtering** and **Collaborative Filtering (ALS)**.
 
 ---
+## Pictures
+
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/c3cc7ca9-6d2e-4218-af3b-7169c77530ef" />
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/7082a175-91d0-47e2-a5b4-b4f927bb4fb6" />
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/9dbc3f52-679d-4c54-9759-145bbc45dbff" />
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/9fe7010f-318c-4101-b796-2648795f4fb2" />
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/2f4aefd2-2b59-42b2-a2b1-4afc0e2e27c2" />
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/11ac37e3-71b5-4eb8-bb84-6310a2f1caed" />
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/99373faa-8e07-4935-abc8-7176a8387ae7" />
+<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/7c6a320d-a9bf-4f50-b36d-a8ef550379f0" />
 
 ## System Architecture
 
