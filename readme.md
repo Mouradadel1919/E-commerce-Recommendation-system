@@ -24,15 +24,15 @@ This project is an end-to-end recommendation system built for e-commerce platfor
 
 ---
 ## Pictures
+<img width="1920" height="1080" alt="Blur_Screenshot (2)" src="https://github.com/user-attachments/assets/70d56985-4eeb-44ab-b830-7dc49420e900" />
+<img width="1920" height="1080" alt="Blur_Screenshot (3)" src="https://github.com/user-attachments/assets/a957f5e4-c910-47f4-9d38-5ce2b9197aee" />
+<img width="1920" height="1080" alt="Blur_Screenshot (4)" src="https://github.com/user-attachments/assets/1c09ce7c-6fb7-431d-8022-c19a59603eee" />
+<img width="1920" height="1080" alt="Blur_Screenshot (5)" src="https://github.com/user-attachments/assets/0869f813-c6f1-424a-a601-588b254a321b" />
+<img width="1920" height="1080" alt="Blur_Screenshot (6)" src="https://github.com/user-attachments/assets/c7599ed7-d774-4795-bc1c-f142875f8da6" />
+<img width="1920" height="1080" alt="Blur_Screenshot (7)" src="https://github.com/user-attachments/assets/37600965-0d17-4fb9-a55e-c8d3ef17bbeb" />
+<img width="1920" height="1080" alt="Blur_Screenshot (8)" src="https://github.com/user-attachments/assets/84bda35b-76ef-4032-99bd-b70fa688dc9b" />
+<img width="1920" height="1080" alt="Blur_Screenshot (9)" src="https://github.com/user-attachments/assets/16aae902-5d52-4f51-a0f1-0467c8e2d55c" />
 
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/7c6a320d-a9bf-4f50-b36d-a8ef550379f0" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/c3cc7ca9-6d2e-4218-af3b-7169c77530ef" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/7082a175-91d0-47e2-a5b4-b4f927bb4fb6" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/9dbc3f52-679d-4c54-9759-145bbc45dbff" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/9fe7010f-318c-4101-b796-2648795f4fb2" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/2f4aefd2-2b59-42b2-a2b1-4afc0e2e27c2" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/11ac37e3-71b5-4eb8-bb84-6310a2f1caed" />
-<img width="1920" height="1080" alt="Image" src="https://github.com/user-attachments/assets/99373faa-8e07-4935-abc8-7176a8387ae7" />
 
 ## System Architecture
 
