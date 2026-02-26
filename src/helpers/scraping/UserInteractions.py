@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from helpers import get_setting
 
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
@@ -98,6 +99,7 @@ def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
     file_path = os.path.join(base_dir, "user_events.json")
 
     session = define_session()
+    settings = get_setting()
 
     # --------------------------
     # Enable GUI on WSL
@@ -128,7 +130,7 @@ def user_interactions(user_id: str = "user_1", duration_sec: int = 300):
     wait = WebDriverWait(driver, 15)
 
     # Open main products page
-    driver.get("https://afaq-stores.com/products")
+    driver.get(settings.WEBSITE_LINK)
 
     on_product_page = False
     start_time = None

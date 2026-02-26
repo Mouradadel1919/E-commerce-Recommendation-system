@@ -14,6 +14,8 @@ class Settings(BaseSettings):
 
     SENTENCE_TRANSFORMER: str
 
+    WEBSITE_LINK: str
+
     class Config:
         env_file= ".env"
 
