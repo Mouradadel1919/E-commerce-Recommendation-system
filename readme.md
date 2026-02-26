@@ -83,7 +83,7 @@ This project is an end-to-end recommendation system built for e-commerce platfor
 
 ### 1. Data Collection & Scraping
 
-Over **6,000 products** were scraped using **Selenium** from [afaq-stores.com](https://afaq-stores.com). Each product is stored in the **`Product`** MongoDB collection, capturing the product name/description as a `content` field for embedding, alongside structured metadata including `product_id`, `category`, `stock`, `price`, and `product_link`.
+Over **6,000 products** were scraped using **Selenium**. Each product is stored in the **`Product`** MongoDB collection, capturing the product name/description as a `content` field for embedding, alongside structured metadata including `product_id`, `category`, `stock`, `price`, and `product_link`.
 
 ---
 
